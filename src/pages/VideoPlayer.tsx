@@ -67,9 +67,9 @@ const VideoPlayer = () => {
                                 
                 const headers = getCommonHeaders();
                 // Add special headers for video API
-                headers['AUTHOR'] = 'SATYAM ROJHAX';
-                headers['OWNER'] = 'PIEWALLAH@SATYAMROJHAX';
-                headers['AUTHORIZATION'] = 'SATYAM ROJHAX HAS ONLY ALLOWED PIE WALLAH TO USE THIS API@MAT KAR LALA MAT KAR, NA KARE JANAB NA KARE, APNI MAA YAHAN CHORI KARKE NA CHUDWAYE!';
+                headers['AUTHOR'] = 'Satyam RojhaX';
+                headers['OWNER'] = 'Pie Wallah @ Satyam RojhaX';
+                headers['AUTHORIZATION'] = 'Satyam RojhaX HAS ONLY ALLOWED PIE WALLAH TO USE THIS API@MAT KAR LALA MAT KAR, NA KARE JANAB NA KARE, APNI MAA YAHAN CHORI KARKE NA CHUDWAYE!';
                 // Generate a fresh random ID for this specific request
                 headers['randomid'] = crypto.randomUUID();
                 // Additional technical headers for video API

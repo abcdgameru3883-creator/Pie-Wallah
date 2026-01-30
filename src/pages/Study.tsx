@@ -296,19 +296,21 @@ const getStatus = (startTime: string, endTime?: string): "live" | "upcoming" | "
 };
 
 // Convert status to uppercase to match HTML
-const normalizeStatus = (status?: string): "live" | "upcoming" | "completed" => {
+const normalizeStatus = (status?: string): "live" | "upcoming" | "completed" | "canceled" => {
   if (!status) return "upcoming";
   const upperStatus = status.toUpperCase();
   if (upperStatus.includes("COMPLETED")) return "completed";
   if (upperStatus.includes("LIVE")) return "live";
+  if (upperStatus.includes("CANCELED") || upperStatus.includes("CANCELLED")) return "canceled";
   if (upperStatus.includes("UPCOMING") || upperStatus.includes("PENDING") || upperStatus.includes("SCHEDULED")) return "upcoming";
   return "upcoming";
 };
 
-const statusStyles: Record<"live" | "upcoming" | "completed", string> = {
+const statusStyles: Record<"live" | "upcoming" | "completed" | "canceled", string> = {
   live: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300",
   upcoming: "bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300",
   completed: "bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300",
+  canceled: "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300",
 };
 
 const Study = () => {
@@ -870,11 +872,11 @@ const Study = () => {
                     </Button>
                   )}
 
-                  {/* Video Buttons - Show only for LECTURE type items with video content or live lectures */}
-                  {item.type === 'LECTURE' && (item.videoDetails || item.duration || item.videoDetails?.duration || item.meetingUrl || item.recordingUrl ||
-                    (item.tag === "Live" && item.lectureType === "LIVE")) && (
-                      // Show Join Live button only for LIVE lectures with Live tag
-                      item.tag === "Live" && item.lectureType === "LIVE" ? (
+                  {/* Video Buttons - Show for live lectures or items with video content */}
+                  {(item.videoDetails || item.duration || item.videoDetails?.duration || item.meetingUrl || item.recordingUrl ||
+                    (item.lectureType === "LIVE")) && (
+                      // Show Join Live button for LIVE lectures that are currently live or tagged as Live
+                      (item.tag === "Live" || (item.lectureType === "LIVE" && item.status === "live")) ? (
                         <Button
                           className="w-full bg-gradient-primary min-w-0 text-xs sm:text-sm"
                           size="sm"
@@ -891,7 +893,7 @@ const Study = () => {
                             </>
                           )}
                         </Button>
-                      ) : (item.status === "completed" || item.tag === "Ended" || item.lectureType === "RECORDED") ? (
+                      ) : (item.status === "completed" || item.tag === "Ended" || item.lectureType === "RECORDED") && item.status !== "canceled" ? (
                         // Show Watch Recording for completed or ended lectures
                         <Button
                           variant="outline"
@@ -910,16 +912,6 @@ const Study = () => {
                             </>
                           )}
                         </Button>
-                      ) : item.tag === "Upcoming" ? (
-                        // Show Set Reminder for upcoming lectures
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="w-full min-w-0 text-xs sm:text-sm"
-                          onClick={() => handleSetReminder(item)}
-                        >
-                          <Bell className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" /> <span className="hidden sm:inline">Set Reminder</span><span className="sm:hidden">Reminder</span>
-                        </Button>
                       ) : null
                     )}
 
@@ -934,11 +926,7 @@ const Study = () => {
                             className="justify-center text-xs sm:text-sm"
                           />
                         </div>
-                      ) : (
-                        <div className="w-full rounded-lg border border-border/50 bg-muted/30 p-2 sm:p-3 text-center text-xs sm:text-sm text-muted-foreground">
-                          No content available
-                        </div>
-                      )
+                      ) : null
                     )}
                 </div>
               </Card>
