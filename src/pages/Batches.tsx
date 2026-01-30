@@ -44,23 +44,31 @@ const PopularBatchCard = ({ batch }: { batch: PopularBatch }) => {
 
   // Get the correct image URL from multiple possible sources
   const getImageUrl = () => {
+    console.log('Getting image URL for batch:', typeInfo.name);
+    
     // First try typeInfo.card.files array (primary source from API)
     if (typeInfo.card?.files?.length > 0) {
+      console.log('Checking card files:', typeInfo.card.files);
+      
       // Look for image files first
       const imageFile = typeInfo.card.files.find(file => file.type === 'IMAGE');
       if (imageFile?.url) {
+        console.log('Using image file URL:', imageFile.url);
         return imageFile.url;
       }
       
       // If no image file, look for video files and use their thumbnail
       const videoFile = typeInfo.card.files.find(file => file.type === 'VIDEO');
       if (videoFile?.video?.image) {
+        console.log('Using video thumbnail URL:', videoFile.video.image);
         return videoFile.video.image;
       }
       
-      // Fallback to first file's URL
-      if (typeInfo.card.files[0]?.url) {
-        return typeInfo.card.files[0].url;
+      // Fallback to first file's URL if it's not a video
+      const firstFile = typeInfo.card.files[0];
+      if (firstFile?.url && firstFile.type !== 'VIDEO') {
+        console.log('Using first file URL:', firstFile.url);
+        return firstFile.url;
       }
     }
     
@@ -73,16 +81,22 @@ const PopularBatchCard = ({ batch }: { batch: PopularBatch }) => {
       const key = typeInfo.previewImage.key.startsWith('/') 
         ? typeInfo.previewImage.key.slice(1) 
         : typeInfo.previewImage.key;
-      return `${baseUrl}${key}`;
+      const previewImageUrl = `${baseUrl}${key}`;
+      console.log('Using previewImage URL:', previewImageUrl);
+      console.log('previewImage data:', typeInfo.previewImage);
+      return previewImageUrl;
     }
     
     // Try typeInfo.previewImageUrl (relative path)
     if (typeInfo.previewImageUrl) {
-      return typeInfo.previewImageUrl.startsWith('http') 
+      const url = typeInfo.previewImageUrl.startsWith('http') 
         ? typeInfo.previewImageUrl
         : `https://static.pw.live/${typeInfo.previewImageUrl}`;
+      console.log('Using previewImageUrl:', url);
+      return url;
     }
     
+    console.log('No image URL found, returning null');
     return null;
   };
 
@@ -97,12 +111,15 @@ const PopularBatchCard = ({ batch }: { batch: PopularBatch }) => {
             src={imageUrl}
             alt={typeInfo.name}
             className="h-48 sm:h-52 w-full object-cover"
+            onLoad={() => console.log('Image loaded successfully:', imageUrl)}
             onError={(e) => {
+              console.error('Image failed to load:', imageUrl);
               const target = e.target as HTMLImageElement;
               // Use the specific fallback image provided
               target.src = 'https://static.pw.live/5eb393ee95fab7468a79d189/9ef3bea0-6eed-46a8-b148-4a35dd6b3b61.png';
               // If fallback also fails, show SVG icon
               target.onerror = () => {
+                console.error('Fallback image also failed');
                 const fallback = document.createElement('div');
                 fallback.className = 'h-48 sm:h-52 w-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center';
                 fallback.innerHTML = '<svg class="h-12 w-12 sm:h-16 sm:w-16 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>';
