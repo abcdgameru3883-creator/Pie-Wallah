@@ -119,7 +119,13 @@ export const fetchBatchDetails = async (batchId: string): Promise<{ success: boo
   if (!batchId) throw new Error("Batch ID is required");
   
   try {
-    const response = await internalFetch(`${API_BASE}/${batchId}/details?type=EXPLORE_LEAD`);
+    const authToken = getAuthToken();
+    const response = await internalFetch(`${API_BASE}/${batchId}/details?type=EXPLORE_LEAD`, {
+      headers: {
+        ...getCommonHeaders(),
+        ...(authToken && { authorization: `Bearer ${authToken}` }),
+      },
+    });
     if (!response.ok) {
       throw new Error("Failed to fetch batch details");
     }
@@ -135,11 +141,14 @@ export const fetchAnnouncements = async (batchId: string): Promise<Announcement[
   if (!batchId) return [];
 
   try {
+    const authToken = getAuthToken();
     // Fetch multiple pages in parallel for better performance
     const pagesToFetch = 5; // Fetch first 5 pages in parallel
     const pagePromises = Array.from({ length: pagesToFetch }, (_, i) => 
       internalFetch(`${ANNOUNCEMENT_API}/batches/${batchId}/announcement?page=${i + 1}&limit=100`, {
         headers: {
+          ...getCommonHeaders(),
+          ...(authToken && { authorization: `Bearer ${authToken}` }),
           'Accept': 'application/json',
           'Content-Type': 'application/json',
         },

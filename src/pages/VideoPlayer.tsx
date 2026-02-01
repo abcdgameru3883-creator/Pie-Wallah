@@ -438,7 +438,18 @@ const VideoPlayer = () => {
         <div className="fixed inset-0 bg-black z-50 overflow-hidden flex flex-col">
             {/* Minimal Header */}
             <div className="absolute top-0 left-0 w-full p-4 z-10 bg-gradient-to-b from-black/80 to-transparent pointer-events-none">
-                <div className="flex items-center justify-end gap-2">
+                <div className="flex items-center justify-between gap-2">
+                    {/* Back Button */}
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => navigate(-1)}
+                        className="text-white hover:bg-white/20 pointer-events-auto rounded-full"
+                        title="Go Back"
+                    >
+                        <ChevronLeft className="h-6 w-6" />
+                    </Button>
+                    
                     <div className="flex items-center gap-2">
                         <DropdownMenu open={showDropdown} onOpenChange={setShowDropdown}>
                             <DropdownMenuTrigger asChild>

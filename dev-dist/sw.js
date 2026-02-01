@@ -88,13 +88,6 @@ define(['./workbox-ececd706'], (function (workbox) { 'use strict';
   workbox.registerRoute(new workbox.NavigationRoute(workbox.createHandlerBoundToURL("index.html"), {
     allowlist: [/^\/$/]
   }));
-  workbox.registerRoute(/^https:\/\/pw-api-0585c7015531\.herokuapp\.com\/.*/i, new workbox.NetworkFirst({
-    "cacheName": "api-cache",
-    plugins: [new workbox.ExpirationPlugin({
-      maxEntries: 100,
-      maxAgeSeconds: 86400
-    })]
-  }), 'GET');
   workbox.registerRoute(/^https:\/\/api\.penpencil\.co\/.*/i, new workbox.NetworkFirst({
     "cacheName": "announcement-api-cache",
     plugins: [new workbox.ExpirationPlugin({

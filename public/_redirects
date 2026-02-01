@@ -1,5 +1,4 @@
 # API Proxy Rules
-/api/* https://pw-api-0585c7015531.herokuapp.com/api/:splat 200
 /announcement-api/* https://api.penpencil.co/:splat 200
 
 # SPA Fallback - All other routes should serve index.html
