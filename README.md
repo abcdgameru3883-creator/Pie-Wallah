@@ -5,7 +5,7 @@
 Pie Wallah is a modern educational platform built with React, TypeScript, and Tailwind CSS. It provides students with access to video lectures, study materials, notes, and interactive learning features.
 
 **🚀 Live Demo**: [https://piewallah.vercel.app/]
-**📦 Repository**: [https://github.com/satyamrojhax/piewallahapp](https://github.com/satyamrojhax/piewallahapp)
+**📦 Repository**: [https://github.com/satyamrojhax/piewallahapp](https://github.com/satyamrojhax/pie-wallah)
 
 **Key Features:**
 - 🎥 Advanced video player with Shaka Player integration
