@@ -192,49 +192,49 @@ const AppContent = () => {
       
       <Routes>
         <Route path="/" element={
-          <ProtectedRoute>
+          
             <ErrorBoundary>
               <Suspense fallback={<PageLoader />}>
                 <Index />
               </Suspense>
             </ErrorBoundary>
-          </ProtectedRoute>
+          
         } />
         <Route path="/batches" element={
-          <ProtectedRoute>
+          
             <ErrorBoundary>
               <Suspense fallback={<PageLoader />}>
                 <Batches />
               </Suspense>
             </ErrorBoundary>
-          </ProtectedRoute>
+          
         } />
         <Route path="/study" element={
-          <ProtectedRoute>
+          
             <ErrorBoundary>
               <Suspense fallback={<PageLoader />}>
                 <Study />
               </Suspense>
             </ErrorBoundary>
-          </ProtectedRoute>
+          
         } />
         <Route path="/weekly-schedule" element={
-          <ProtectedRoute>
+          
             <ErrorBoundary>
               <Suspense fallback={<PageLoader />}>
                 <WeeklySchedule />
               </Suspense>
             </ErrorBoundary>
-          </ProtectedRoute>
+          
         } />
         <Route path="/pdf-bank" element={
-          <ProtectedRoute>
+          
             <ErrorBoundary>
               <Suspense fallback={<PageLoader />}>
                 <PdfBank />
               </Suspense>
             </ErrorBoundary>
-          </ProtectedRoute>
+          
         } />
         <Route path="/community" element={
           <ProtectedRoute>
@@ -243,7 +243,7 @@ const AppContent = () => {
                 <Community />
               </Suspense>
             </ErrorBoundary>
-          </ProtectedRoute>
+          
         } />
         <Route path="/ai-guru" element={
           <ProtectedRoute>
@@ -252,7 +252,7 @@ const AppContent = () => {
                 <AiGuru />
               </Suspense>
             </ErrorBoundary>
-          </ProtectedRoute>
+          
         } />
         <Route path="/my-batches" element={
           <ProtectedRoute>
@@ -261,73 +261,72 @@ const AppContent = () => {
                 <MyBatches />
               </Suspense>
             </ErrorBoundary>
-          </ProtectedRoute>
+          
         } />
         <Route path="/batch/:batchId" element={
-          <ProtectedRoute>
+          
             <ErrorBoundary>
               <Suspense fallback={<BatchCardSkeleton />}>
                 <BatchDetails />
               </Suspense>
             </ErrorBoundary>
-          </ProtectedRoute>
+          
         } />
         <Route path="/batch/:batchId/subject/:subjectSlug/topics" element={
-          <ProtectedRoute>
+          
             <ErrorBoundary>
               <Suspense fallback={<TopicCardSkeleton />}>
                 <TopicDetails />
               </Suspense>
             </ErrorBoundary>
-          </ProtectedRoute>
+          
         } />
         <Route path="/batch/:batchId/subject/:subjectSlug/topic/:topicId" element={
-          <ProtectedRoute>
+          
             <ErrorBoundary>
               <Suspense fallback={<VideoPlayerSkeleton />}>
                 <TopicSubjectDetails />
               </Suspense>
             </ErrorBoundary>
-          </ProtectedRoute>
+          
         } />
         <Route path="/topic/:topicId" element={
-          <ProtectedRoute>
+          
             <ErrorBoundary>
               <Suspense fallback={<TopicCardSkeleton />}>
                 <TopicDetails />
               </Suspense>
             </ErrorBoundary>
-          </ProtectedRoute>
+          
         } />
         <Route path="/video-data-not-found" element={
-          <ProtectedRoute>
+         
             <ErrorBoundary>
               <VideoDataNotFound />
             </ErrorBoundary>
-          </ProtectedRoute>
+         
         } />
-        <Route path="/login" element={<Login />} />
-        <Route path="/otp-verification" element={<OtpVerification />} />
+        <Route path="/otp-verification" element={<TopicDetails />} />
         <Route path="/profile" element={
-          <ProtectedRoute>
+          
             <ErrorBoundary>
               <Suspense fallback={<ProfileSkeleton />}>
                 <Profile />
               </Suspense>
             </ErrorBoundary>
-          </ProtectedRoute>
+          
         } />
         <Route path="/tictactoe" element={<TicTacToe />} />
         <Route path="/docs" element={<DeveloperDocs />} />
         <Route path="/developer-docs" element={<DeveloperDocs />} />
         <Route path="/watch" element={
-          <ProtectedRoute>
+          
             <ErrorBoundary>
               <Suspense fallback={<VideoPlayerSkeleton />}>
                 <VideoPlayer />
               </Suspense>
             </ErrorBoundary>
-          </ProtectedRoute>
+          
         } />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
