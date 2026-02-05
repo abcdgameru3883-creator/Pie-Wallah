@@ -1,10 +1,10 @@
-# Pie Wallah - Educational Platform
+# Epic Verse - Educational Platform
 
 ## Project Overview
 
-Pie Wallah is a modern educational platform built with React, TypeScript, and Tailwind CSS. It provides students with access to video lectures, study materials, notes, and interactive learning features.
+Epic Verse is a modern educational platform built with React, TypeScript, and Tailwind CSS. It provides students with access to video lectures, study materials, notes, and interactive learning features.
 
-**🚀 Live Demo**: [https://piewallah.vercel.app/]
+**🚀 Live Demo**: [https://EpicVerse.vercel.app/]
 **📦 Repository**: [https://github.com/satyamrojhax/Pie-Wallah](https://github.com/satyamrojhax/Pie-Wallah)
 
 **Key Features:**
@@ -132,7 +132,7 @@ VITE_VIDEO_API_BASE_URL=your_video_api_base_url
 VITE_VIDEO_API_PROXY_BASE_URL=your_proxy_base_url
 
 # Application (Optional)
-VITE_APP_NAME=Pie Wallah
+VITE_APP_NAME=Epic Verse
 VITE_APP_VERSION=1.0.0
 ```
 
@@ -176,7 +176,7 @@ The application uses secure token-based authentication with proper header manage
 ### One-Click Setup
 ```bash
 # Clone and setup in one command
-git clone https://github.com/satyamrojhax/Pie-Wallah.git && cd Pie-Wallah && npm install && npm run dev
+git clone https://github.com/satyamrojhax/Pie-Wallah.git && cd Epic Verse && npm install && npm run dev
 ```
 
 ### Docker Quick Start
@@ -227,11 +227,11 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ## Support
 
 For support and inquiries:
-- **Developer**: Satyam RojhaX
-- **Email**: epowerxlabs@gmail.com
-- **Website**: https://piewallah.vercel.app/
-- **Social**: [@satyamrojhax](https://instagram.com/satyamrojha.dev)
+- **Developer**: Soon
+- **Email**: Soon
+- **Website**: https://epicverse.vercel.app/
+- **Social**:soon
 
 ---
 
-Built with ❤️ by [Satyam RojhaX](https://instagram.com/satyamrojha.dev)
+Built with ❤️ by [Epic Verse]
