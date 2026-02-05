@@ -1,8 +1,8 @@
-# Pie Wallah - Educational Platform
+# Epic Verse - Educational Platform
 
 ## Project Overview
 
-Pie Wallah is a modern educational platform built with React, TypeScript, and Tailwind CSS. It provides students with access to video lectures, study materials, notes, and interactive learning features.
+Epic Verse is a modern educational platform built with React, TypeScript, and Tailwind CSS. It provides students with access to video lectures, study materials, notes, and interactive learning features.
 
 **🚀 Live Demo**: [https://piewallah.vercel.app/]
 **📦 Repository**: [https://github.com/satyamrojhax/Pie-Wallah](https://github.com/satyamrojhax/Pie-Wallah)
@@ -227,11 +227,6 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ## Support
 
 For support and inquiries:
-- **Developer**: Satyam RojhaX
-- **Email**: epowerxlabs@gmail.com
-- **Website**: https://piewallah.vercel.app/
-- **Social**: [@satyamrojhax](https://instagram.com/satyamrojha.dev)
+- **Developer**: Epic Multiverse 
 
----
-
-Built with ❤️ by [Satyam RojhaX](https://instagram.com/satyamrojha.dev)
+Built with ❤️ by [Epic]
