@@ -4,6 +4,25 @@ const VIDEO_API_BASE = "https://openspaceapi.vercel.app/api";
 const FALLBACK_API_BASE = "https://opendataapi.vercel.app/api";
 const SECONDARY_FALLBACK_API_BASE = "https://piewallahapi.vercel.app/api";
 
+// Helper function to detect if a stream is live based on URL patterns
+const isLiveStream = (streamUrl: string): boolean => {
+  return streamUrl.includes('.m3u8') && 
+         (streamUrl.includes('live') || 
+          streamUrl.includes('stream') || 
+          streamUrl.includes('realtime') ||
+          streamUrl.includes('cloudfront') ||
+          streamUrl.includes('Signature=') ||
+          streamUrl.includes('Key-Pair-Id=') ||
+          streamUrl.includes('Policy='));
+};
+
+// Helper function to detect CloudFront CDN
+const isCloudFrontStream = (streamUrl: string, cdnType?: string): boolean => {
+  return cdnType === 'Cloudfront' || 
+         streamUrl.includes('cloudfront') || 
+         streamUrl.includes('cloudfront.net');
+};
+
 export type VideoResponse = {
   success: boolean;
   source: string;
@@ -117,11 +136,14 @@ export const fetchVideoUrl = async (
       throw new Error('Video API returned unsuccessful response');
     }
     
-    // Check if DRM is available, if not, proceed to fallbacks
+    // Check if DRM is available, but skip requirement for live streams and CloudFront CDN
     if (data.drm && data.drm.kid && data.drm.key) {
       return data as VideoResponse;
+    } else if (isLiveStream(data.stream_url) || isCloudFrontStream(data.stream_url, data.data?.cdnType)) {
+      console.log('Live stream or CloudFront CDN detected, proceeding without DRM');
+      return data as VideoResponse;
     } else {
-      console.warn('Primary API succeeded but no DRM keys available, trying fallbacks for HLS support');
+      console.warn('Primary API succeeded but no DRM keys available for non-live stream, trying fallbacks for HLS support');
     }
   } catch (error) {
     lastError = error instanceof Error ? error : new Error('Unknown error');
@@ -144,7 +166,7 @@ export const fetchVideoUrl = async (
       throw new Error('Fallback API returned unsuccessful response');
     }
 
-    // Check if DRM is available
+    // Check if DRM is available, but skip requirement for live streams and CloudFront CDN
     if (data.drm && data.drm.kid && data.drm.key) {
       // Convert fallback response to match primary API structure
       const convertedResponse: VideoResponse = {
@@ -167,8 +189,30 @@ export const fetchVideoUrl = async (
       };
       
       return convertedResponse;
+    } else if (isLiveStream(data.stream_url) || isCloudFrontStream(data.stream_url, data.data?.cdnType)) {
+      console.log('Live stream or CloudFront CDN detected in fallback, proceeding without DRM');
+      const convertedResponse: VideoResponse = {
+        success: true,
+        source: 'OpenData',
+        powered_by: 'Satyam RojhaX',
+        data: {
+          url: data.data.url,
+          signedUrl: data.data.signedUrl,
+          urlType: data.data.urlType || 'penpencilvdo',
+          videoContainer: data.data.videoContainer || 'DASH',
+          isCmaf: data.data.isCmaf || false,
+          cdnType: data.data.cdnType || 'Gcp',
+          original_source: 'OpenData'
+        },
+        stream_url: data.stream_url,
+        url_type: data.url_type || 'penpencilvdo',
+        drm: undefined, // No DRM for live streams or CloudFront
+        timestamp: new Date().toISOString()
+      };
+      
+      return convertedResponse;
     } else {
-      console.warn('First fallback API succeeded but no DRM keys available, trying secondary fallback');
+      console.warn('First fallback API succeeded but no DRM keys available for non-live stream, trying secondary fallback');
     }
   } catch (error) {
     fallbackError = error instanceof Error ? error : new Error('Unknown error');
@@ -192,7 +236,7 @@ export const fetchVideoUrl = async (
       throw new Error('Secondary fallback API returned unsuccessful response');
     }
 
-    // Check if DRM is available, if not use HLS fallback
+    // Check if DRM is available, but skip requirement for live streams and CloudFront CDN
     if (data.drm && data.drm.kid && data.drm.key) {
       // Convert secondary fallback response to match primary API structure
       const convertedResponse: VideoResponse = {
@@ -215,9 +259,31 @@ export const fetchVideoUrl = async (
       };
       
       return convertedResponse;
+    } else if (isLiveStream(data.stream_url) || isCloudFrontStream(data.stream_url, data.data?.cdnType)) {
+      console.log('Live stream or CloudFront CDN detected in secondary fallback, proceeding without DRM');
+      const convertedResponse: VideoResponse = {
+        success: true,
+        source: 'PieWallah',
+        powered_by: data.branding?.powered_by || 'Satyam RojhaX',
+        data: {
+          url: data.data.url,
+          signedUrl: data.data.signedUrl,
+          urlType: data.data.urlType || 'penpencilvdo',
+          videoContainer: data.data.videoContainer || 'DASH',
+          isCmaf: data.data.isCmaf || false,
+          cdnType: data.data.cdnType || 'Gcp',
+          original_source: 'PieWallah'
+        },
+        stream_url: data.stream_url,
+        url_type: data.url_type || 'penpencilvdo',
+        drm: undefined, // No DRM for live streams or CloudFront
+        timestamp: new Date().toISOString()
+      };
+      
+      return convertedResponse;
     } else if (data.hls_url) {
       // Use HLS fallback when DRM is not available
-      console.warn('No DRM keys available, using HLS fallback from PieWallah API');
+      console.warn('No DRM keys available for non-live stream, using HLS fallback from PieWallah API');
       const hlsResponse: VideoResponse = {
         success: true,
         source: 'PieWallah-HLS',
@@ -239,7 +305,7 @@ export const fetchVideoUrl = async (
       
       return hlsResponse;
     } else {
-      throw new Error('No DRM keys or HLS URL available from PieWallah API');
+      throw new Error('No DRM keys or HLS URL available from PieWallah API for non-live stream');
     }
   } catch (secondaryFallbackError) {
     // If all APIs fail, throw comprehensive error

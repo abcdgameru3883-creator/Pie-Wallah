@@ -6,6 +6,18 @@ import 'shaka-player/dist/controls.css';
 import { Loader2 } from 'lucide-react';
 import { addCrossOriginAttributes, handleCrossOriginError, createCrossOriginVideoUrl } from '@/lib/crossOriginUtils';
 
+// Helper function to detect if a stream is live based on URL patterns
+const isLiveStream = (manifestUrl: string): boolean => {
+  return manifestUrl.includes('.m3u8') && 
+         (manifestUrl.includes('live') || 
+          manifestUrl.includes('stream') || 
+          manifestUrl.includes('realtime') ||
+          manifestUrl.includes('cloudfront') ||
+          manifestUrl.includes('Signature=') ||
+          manifestUrl.includes('Key-Pair-Id=') ||
+          manifestUrl.includes('Policy='));
+};
+
 interface ShakaPlayerProps {
     manifestUrl: string;
     drm?: {
@@ -112,8 +124,11 @@ const ShakaPlayer: React.FC<ShakaPlayerProps> = ({ manifestUrl, drm, autoplay = 
             player.addEventListener('adaptation', () => {
                             });
 
-            // Configure DRM if provided
-            if (drm) {
+            // Configure DRM if provided, but skip for live streams and CloudFront CDN
+            const isLive = isLiveStream(manifestUrl);
+            const isCloudFront = cdnType === 'Cloudfront' || manifestUrl.includes('cloudfront') || manifestUrl.includes('cloudfront.net');
+            
+            if (drm && !isLive && !isCloudFront) {
                                 
                 player.configure({
                     drm: {
@@ -123,7 +138,10 @@ const ShakaPlayer: React.FC<ShakaPlayerProps> = ({ manifestUrl, drm, autoplay = 
                     }
                 });
                 
-                            } else {
+                            } else if (drm && (isLive || isCloudFront)) {
+                console.log('DRM provided but skipped for live stream or CloudFront CDN');
+                // No DRM configuration for live streams or CloudFront CDN
+            } else {
                 // No DRM configuration provided
             }
 
@@ -184,10 +202,19 @@ const ShakaPlayer: React.FC<ShakaPlayerProps> = ({ manifestUrl, drm, autoplay = 
             };
             
             // Special configuration for Cloudfront CDN HLS streams
-            if (cdnType === 'Cloudfront' || urlType === 'awsVideo') {
-                                hlsConfig.streaming.retryParameters.maxAttempts = 8; // More retries for CDN
+            if (isCloudFront) {
+                hlsConfig.streaming.retryParameters.maxAttempts = 8; // More retries for CDN
                 hlsConfig.streaming.bufferingGoal = 15; // Larger buffer for CDN
                 hlsConfig.streaming.liveSync.targetLatency = 5; // Slightly higher target latency
+                
+                // Additional optimizations for live CloudFront streams
+                if (isLive) {
+                    hlsConfig.streaming.retryParameters.maxAttempts = 10; // Even more retries for live
+                    hlsConfig.streaming.bufferingGoal = 20; // Even larger buffer for live
+                    hlsConfig.streaming.liveSync.targetLatency = 8; // Higher target latency for stability
+                    hlsConfig.streaming.liveSync.maxLatency = 30; // Higher max latency for live
+                    hlsConfig.streaming.lowLatencyMode = false; // Disable low latency mode for stability
+                }
             }
             
             player.configure(hlsConfig);
@@ -200,7 +227,7 @@ const ShakaPlayer: React.FC<ShakaPlayerProps> = ({ manifestUrl, drm, autoplay = 
                     
                                         
                     // Special handling for Cloudfront CDN HLS streams
-                    if (cdnType === 'Cloudfront' || urlType === 'awsVideo') {
+                    if (isCloudFront) {
                         const manifestUrlObj = new URL(manifestUrl, window.location.href);
                         const searchParams = manifestUrlObj.search;
                         
