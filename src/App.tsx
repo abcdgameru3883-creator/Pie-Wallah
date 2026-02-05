@@ -303,12 +303,12 @@ const AppContent = () => {
          
             <ErrorBoundary>
               <VideoDataNotFound />
-            </ErrorBoundary>
-         
-        } />
-        <Route path="/otp-verification" element={<TopicDetails />} />
-        <Route path="/profile" element={
-          
+                  </ErrorBoundary>
+    } />
+
+<Route path="/login" element={<TopicDetails />} />
+<Route path="/otp-verification" element={<TopicDetails />} />
+
             <ErrorBoundary>
               <Suspense fallback={<ProfileSkeleton />}>
                 <Profile />
