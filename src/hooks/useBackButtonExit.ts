@@ -1,13 +1,12 @@
 import { useEffect, useRef, useCallback } from 'react';
 
-// Detect if device is mobile
+// Detect if device is mobile (strict check - only true mobile devices)
 const isMobileDevice = () => {
   const userAgent = navigator.userAgent || navigator.vendor || (window as any).opera;
   const mobileRegex = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
-  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-  const isSmallScreen = window.innerWidth <= 768;
   
-  return mobileRegex.test(userAgent) || (isTouchDevice && isSmallScreen);
+  // Only check user agent - don't use touch or screen size to avoid false positives on desktop
+  return mobileRegex.test(userAgent);
 };
 
 // Pre-create styles to avoid repeated DOM operations

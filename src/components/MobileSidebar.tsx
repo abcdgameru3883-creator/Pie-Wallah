@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { X, Grid3x3, Github, Linkedin, Instagram, Twitter } from "lucide-react";
+import { X, Menu, Github, Linkedin, Instagram, Twitter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { sidebarNavLinks, bottomNavLinks } from "@/constants/navigation";
@@ -60,7 +60,7 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ hasEnrolledBatches = fals
             className="h-9 w-9 p-0 bg-background/90 backdrop-blur-md border-border/50 shadow-lg hover-lift btn-smooth focus-ring"
             aria-label="Open navigation menu"
           >
-            <Grid3x3 className="h-4.5 w-4.5 transition-transform duration-300 hover:rotate-90" />
+            <Menu className="h-4.5 w-4.5 transition-transform duration-300 hover:rotate-90" />
           </Button>
         </SheetTrigger>
           <SheetContent side="left" className="w-80 max-w-[85vw] p-0 bg-background/95 backdrop-blur-xl border-border/50 z-[60] transition-all duration-300 flex flex-col h-full">

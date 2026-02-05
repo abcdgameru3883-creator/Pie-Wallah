@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getCommonHeaders } from '@/lib/auth';
+import { saveNavigationState, getNavigationState } from '@/lib/navigationState';
 import Navbar from "@/components/Navbar";
 import BackButton from "@/components/BackButton";
 import { Card } from "@/components/ui/card";
@@ -21,8 +22,27 @@ const TopicDetails = () => {
   const { batchId, subjectSlug } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
-  const { subjectName, batchName, subjectId } = (location.state as LocationState) || {};
+  const locationState = (location.state as LocationState) || {};
+  const persistedState = getNavigationState();
+  
+  // Use location state first, fallback to persisted state
+  const subjectName = locationState.subjectName || persistedState.subjectName;
+  const batchName = locationState.batchName || persistedState.batchName;
+  const subjectId = locationState.subjectId || persistedState.subjectId;
   const [activeTab, setActiveTab] = useState("chapters");
+
+  // Save navigation state when component mounts or params change
+  useEffect(() => {
+    if (batchId && subjectSlug && subjectName) {
+      saveNavigationState({
+        batchId,
+        subjectSlug,
+        subjectId,
+        subjectName,
+        batchName,
+      });
+    }
+  }, [batchId, subjectSlug, subjectName, batchName, subjectId]);
 
   // Check if user has access to this batch content
   if (batchId && !canAccessBatchContent(batchId)) {
@@ -71,7 +91,8 @@ const TopicDetails = () => {
       if (!response.ok) throw new Error('Failed to fetch chapters');
       return response.json();
     },
-    staleTime: 1000 * 60 * 5,
+    staleTime: 0,
+    refetchOnWindowFocus: true,
   });
 
   const chapters = chaptersData?.data || [];
@@ -92,7 +113,8 @@ const TopicDetails = () => {
       if (!response.ok) throw new Error('Failed to fetch study material');
       return response.json();
     },
-    staleTime: 1000 * 60 * 5,
+    staleTime: 0,
+    refetchOnWindowFocus: true,
   });
 
   const studyMaterial = studyMaterialData?.data || [];

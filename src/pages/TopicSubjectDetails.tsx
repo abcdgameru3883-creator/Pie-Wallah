@@ -12,6 +12,7 @@ import { fetchLectures, fetchNotes, fetchDPPNotes, fetchScheduleDetails } from "
 import { getVideoStreamUrl } from "@/services/videoService";
 import { canAccessBatchContent } from "@/lib/enrollmentUtils";
 import { VideoPlayerSkeleton, ListSkeleton, CardSkeleton } from "@/components/ui/skeleton-loaders";
+import { saveNavigationState, getNavigationState } from '@/lib/navigationState';
 
 type Lecture = {
   _id: string;
@@ -367,7 +368,16 @@ const getContentDuration = (content: any): number | undefined => {
 const TopicSubjectDetails = () => {
   const { batchId, subjectSlug, topicId } = useParams();
   const location = useLocation();
-  const { subjectName, topicName, subjectId } = (location.state as LocationState) || {};
+  const locationState = (location.state as LocationState) || {};
+  const persistedState = getNavigationState();
+  const navigate = useNavigate();
+  
+  // Use location state first, fallback to persisted state
+  const subjectName = locationState.subjectName || persistedState.subjectName;
+  const topicName = locationState.topicName || persistedState.topicName;
+  const subjectId = locationState.subjectId || persistedState.subjectId;
+  const batchName = locationState.batchName || persistedState.batchName;
+  
   const [activeTab, setActiveTab] = useState("lectures");
   const [showAttachmentsDialog, setShowAttachmentsDialog] = useState(false);
   const [selectedLecture, setSelectedLecture] = useState<Lecture | null>(null);
@@ -379,7 +389,21 @@ const TopicSubjectDetails = () => {
   const [notesPage, setNotesPage] = useState(1);
   const [allLectures, setAllLectures] = useState<Lecture[]>([]); // Accumulate all lectures
   const [allNotes, setAllNotes] = useState<Note[]>([]); // Accumulate all notes
-  const navigate = useNavigate();
+
+  // Save navigation state when component mounts or params change
+  useEffect(() => {
+    if (batchId && subjectSlug && topicId && subjectName && topicName) {
+      saveNavigationState({
+        batchId,
+        subjectSlug,
+        topicId,
+        subjectId,
+        subjectName,
+        topicName,
+        batchName,
+      });
+    }
+  }, [batchId, subjectSlug, topicId, subjectName, topicName, subjectId, batchName]);
 
   // Load completed lectures from localStorage on component mount
   useEffect(() => {
@@ -448,7 +472,8 @@ const TopicSubjectDetails = () => {
       const response = await fetchLectures(batchId!, subjectSlug!, topicId!, lecturesPage);
       return response;
     },
-    staleTime: 1000 * 60 * 5,
+    staleTime: 0,
+    refetchOnWindowFocus: true,
   });
 
   // Flatten all lecture pages
@@ -506,7 +531,8 @@ const TopicSubjectDetails = () => {
       
       return response;
     },
-    staleTime: 1000 * 60 * 5,
+    staleTime: 0,
+    refetchOnWindowFocus: true,
   });
 
   // Flatten all note pages
@@ -564,7 +590,8 @@ const TopicSubjectDetails = () => {
       
       return response;
     },
-    staleTime: 1000 * 60 * 5,
+    staleTime: 0,
+    refetchOnWindowFocus: true,
   });
 
   const dpp = dppData?.data || []; // Extract data array from ContentResponse
