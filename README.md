@@ -5,7 +5,7 @@
 Epic Verse is a modern educational platform built with React, TypeScript, and Tailwind CSS. It provides students with access to video lectures, study materials, notes, and interactive learning features.
 
 **🚀 Live Demo**: [https://EpicVerse.vercel.app/]
-**📦 Repository**: [https://github.com/satyamrojhax/Pie-Wallah](https://github.com/satyamrojhax/Pie-Wallah)
+**📦 Repository**: [https://github.com/EpicMultiverse/Epic-Wallah](https://github.com/EpicMultiverse/Epic-Wallah)
 
 **Key Features:**
 - 🎥 Advanced video player with Shaka Player integration
@@ -29,10 +29,10 @@ Follow these steps to set up the project locally:
 
 ```sh
 # Step 1: Clone the repository
-git clone https://github.com/satyamrojhax/Pie-Wallah.git
+git clone https://github.com/EpicMultiverse/Epic-Wallahgt
 
 # Step 2: Navigate to the project directory
-cd Pie-Wallah
+cd Epic Verse
 
 # Step 3: Install dependencies
 npm install
