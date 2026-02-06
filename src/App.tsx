@@ -243,8 +243,8 @@ const AppContent = () => {
                 <Community />
               </Suspense>
             </ErrorBoundary>
-          
-        } />
+          />
+        
         <Route path="/ai-guru" element={
           <ProtectedRoute>
             <ErrorBoundary>
