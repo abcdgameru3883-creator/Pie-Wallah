@@ -297,41 +297,34 @@ const AppContent = () => {
                 <TopicDetails />
               </Suspense>
             </ErrorBoundary>
-          
-        } />
-        <Route path="/video-data-not-found" element={
-         
+                    <Route path="/video-data-not-found" element={
             <ErrorBoundary>
               <VideoDataNotFound />
-                  </ErrorBoundary>
-    } />
-      <Route path="/login" element={<TopicDetails />} />
-      <Route path="/otp-verification" element={<TopicDetails />} />
-      <Route path="/profile" element={
-        <ErrorBoundary>
-          <Suspense fallback={<ProfileSkeleton />}>
-            <Profile />
-          </Suspense>
-        </ErrorBoundary>
-      } />
-
-
-        <Route path="/tictactoe" element={<TicTacToe />} />
-        <Route path="/docs" element={<DeveloperDocs />} />
-        <Route path="/developer-docs" element={<DeveloperDocs />} />
-        <Route path="/watch" element={
-          
+            </ErrorBoundary>
+          } />
+          <Route path="/login" element={<TopicDetails />} />
+          <Route path="/otp-verification" element={<TopicDetails />} />
+          <Route path="/profile" element={
+            <ErrorBoundary>
+              <Suspense fallback={<ProfileSkeleton />}>
+                <Profile />
+              </Suspense>
+            </ErrorBoundary>
+          } />
+          <Route path="/tictactoe" element={<TicTacToe />} />
+          <Route path="/docs" element={<DeveloperDocs />} />
+          <Route path="/developer-docs" element={<DeveloperDocs />} />
+          <Route path="/watch" element={
             <ErrorBoundary>
               <Suspense fallback={<VideoPlayerSkeleton />}>
                 <VideoPlayer />
               </Suspense>
             </ErrorBoundary>
-          
-        } />
-        {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-      
+          } />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </main>
+
       <OfflineModal
         isOpen={showOfflineModal}
         onClose={() => setShowOfflineModal(false)}
@@ -341,20 +334,14 @@ const AppContent = () => {
       />
       
       {!hideFooter && <Footer />}
-      
       <Analytics />
-    </>
+    </div>
   );
 };
 
 const App = () => {
-  // Enable double back button exit functionality
   useBackButtonExit();
-
-  // Global error handler
-  const handleGlobalError = React.useCallback((error: Error, errorInfo: any) => {
-    // Error handling without console log
-  }, []);
+  const handleGlobalError = React.useCallback((error: Error, errorInfo: any) => {}, []);
 
   return (
     <ErrorBoundary onError={handleGlobalError}>
