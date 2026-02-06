@@ -308,14 +308,15 @@ const AppContent = () => {
 
 <Route path="/login" element={<TopicDetails />} />
 <Route path="/otp-verification" element={<TopicDetails />} />
+<Route path="/profile" element={
+    <ErrorBoundary>
+      <Suspense fallback={<ProfileSkeleton />}>
+        <Profile />
+      </Suspense>
+    </ErrorBoundary>
+  } 
+/>
 
-            <ErrorBoundary>
-              <Suspense fallback={<ProfileSkeleton />}>
-                <Profile />
-              </Suspense>
-            </ErrorBoundary>
-          
-        } />
         <Route path="/tictactoe" element={<TicTacToe />} />
         <Route path="/docs" element={<DeveloperDocs />} />
         <Route path="/developer-docs" element={<DeveloperDocs />} />
