@@ -96,15 +96,18 @@ const Navbar = () => {
             
             {/* Logo/Text */}
             <div className="flex items-center gap-2 group md:ml-0 ml-2">
-              <Link to="/" className="flex items-center gap-2 transition-transform duration-300 hover:scale-105">
-                <img
-                  src="/logo.png"
-                  alt="Pie Wallah logo"
-                  className="hidden md:block h-8 w-8 rounded-xl border border-border/50 bg-background object-cover shadow-elevation-1 transition-all duration-300 group-hover:shadow-elevation-2 group-hover:scale-110"
-                />
-                <span className="text-lg font-semibold tracking-tight text-foreground leading-none transition-colors duration-300 group-hover:text-primary">Pie Wallah</span>
-              </Link>
-            </div>
+  <Link to="/" className="flex items-center gap-2 transition-transform duration-300">
+    <img
+      src="/logo.png"
+      alt="Epic Verse logo"
+      className="hidden md:block h-8 w-8 rounded-xl border border-border/50 bg-background"
+    />
+    <span className="text-lg font-semibold tracking-tight text-foreground leading-none">
+      Epic Verse
+    </span>
+  </Link>
+</div>
+
 
             {/* Desktop Navigation */}
             <div className="hidden rounded-full border border-border/40 bg-background/60 px-1.5 py-1 shadow-elevation-1 backdrop-blur-sm md:flex md:items-center md:gap-0.5 transition-all duration-300 hover:shadow-elevation-2">
